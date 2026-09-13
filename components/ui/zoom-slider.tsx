@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 
@@ -298,9 +299,17 @@ export function ZoomSliderComp({
     };
 
     const onWheel = (event: WheelEvent) => {
-      // Prevent browser page from scrolling up/down while user is wheeling inside this area
-      event.preventDefault();
-      state.target -= event.deltaY * SCROLL_PER_PX;
+      // If user is holding Shift (standard horizontal scroll gesture) or explicitly scrolling horizontally:
+      if (event.shiftKey) {
+        event.preventDefault();
+        const delta = (event.deltaY || event.deltaX) * SCROLL_PER_PX;
+        state.target -= delta;
+      } else if (Math.abs(event.deltaX) > Math.abs(event.deltaY) && Math.abs(event.deltaX) > 3) {
+        event.preventDefault();
+        state.target -= event.deltaX * SCROLL_PER_PX;
+      }
+      // Normal vertical mouse wheel / trackpad scroll (event.deltaY) is NOT hijacked or prevented!
+      // This allows the user to scroll smoothly through the page past the Work section to the rest of the website.
     };
 
     const beginDrag = (clientX: number, clientY: number) => {
@@ -310,19 +319,16 @@ export function ZoomSliderComp({
       state.velocity = 0;
     };
 
-    const moveDrag = (clientX: number, clientY: number, direction: number = 1) => {
+    const moveDrag = (clientX: number, direction: number = 1) => {
       if (!state.isDragging) return;
 
       const deltaX = clientX - state.lastX;
-      const deltaY = clientY - state.lastY;
-      const rawDelta =
-        Math.abs(deltaX) >= Math.abs(deltaY) ? -deltaX : -deltaY;
-      const delta = rawDelta * direction;
+      // Only horizontal drag movement controls the horizontal card strip
+      const delta = -deltaX * direction;
 
       state.target += delta;
       state.velocity = lerp(state.velocity, delta, 0.5);
       state.lastX = clientX;
-      state.lastY = clientY;
     };
 
     const endDrag = () => {
@@ -330,23 +336,59 @@ export function ZoomSliderComp({
     };
 
     const onMouseDown = (event: MouseEvent) => beginDrag(event.clientX, event.clientY);
-    const onMouseMove = (event: MouseEvent) => moveDrag(event.clientX, event.clientY);
+    const onMouseMove = (event: MouseEvent) => moveDrag(event.clientX, 1);
     const onMouseUp = endDrag;
 
-    const onTouchStart = (event: TouchEvent) =>
-      beginDrag(event.touches[0].clientX, event.touches[0].clientY);
-    const onTouchMove = (event: TouchEvent) => {
-      if (state.isDragging && event.cancelable) {
-        event.preventDefault();
-      }
-      moveDrag(event.touches[0].clientX, event.touches[0].clientY, -1);
+    // Separate touch tracking to distinguish horizontal carousel swipe from vertical page scroll
+    const touchTracking = {
+      startX: 0,
+      startY: 0,
+      direction: null as 'horizontal' | 'vertical' | null,
     };
-    const onTouchEnd = endDrag;
+
+    const onTouchStart = (event: TouchEvent) => {
+      if (!event.touches[0]) return;
+      const touch = event.touches[0];
+      touchTracking.startX = touch.clientX;
+      touchTracking.startY = touch.clientY;
+      touchTracking.direction = null;
+      beginDrag(touch.clientX, touch.clientY);
+    };
+
+    const onTouchMove = (event: TouchEvent) => {
+      if (!event.touches[0] || !state.isDragging) return;
+      const touch = event.touches[0];
+
+      if (touchTracking.direction === null) {
+        const diffX = Math.abs(touch.clientX - touchTracking.startX);
+        const diffY = Math.abs(touch.clientY - touchTracking.startY);
+        if (diffX > 7 || diffY > 7) {
+          if (diffX >= diffY) {
+            touchTracking.direction = 'horizontal';
+          } else {
+            touchTracking.direction = 'vertical';
+            state.isDragging = false; // Vertical scroll: let page scroll naturally
+          }
+        }
+      }
+
+      if (touchTracking.direction === 'horizontal') {
+        if (event.cancelable) {
+          event.preventDefault();
+        }
+        moveDrag(touch.clientX, -1);
+      }
+      // If vertical, do not preventDefault and do not move slider
+    };
+
+    const onTouchEnd = () => {
+      endDrag();
+      touchTracking.direction = null;
+    };
 
     const container = containerRef.current;
 
     if (container) {
-      // passive: false is REQUIRED to allow event.preventDefault() so the page doesn't scroll up/down while in this area
       container.addEventListener('wheel', onWheel, { passive: false });
       container.addEventListener('mousedown', onMouseDown);
       container.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -494,6 +536,14 @@ export function ZoomSliderComp({
       : `Slide ${activeIndex + 1} of ${images.length}`
     : '';
 
+  const slideNext = () => {
+    stateRef.current.target -= cardStep;
+  };
+
+  const slidePrev = () => {
+    stateRef.current.target += cardStep;
+  };
+
   return (
     <div
       id={id}
@@ -516,6 +566,28 @@ export function ZoomSliderComp({
           ) : null}
         </div>
       ) : null}
+
+      {/* Discrete project navigation arrows */}
+      <div className="absolute right-4 sm:right-8 top-6 sm:top-8 z-20 flex items-center gap-2">
+        <button
+          type="button"
+          onClick={slidePrev}
+          className="p-2 sm:p-2.5 rounded-full bg-zinc-100/90 hover:bg-zinc-200 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 transition-all cursor-pointer shadow-sm active:scale-95"
+          aria-label="Previous project"
+          title="Previous project"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <button
+          type="button"
+          onClick={slideNext}
+          className="p-2 sm:p-2.5 rounded-full bg-zinc-100/90 hover:bg-zinc-200 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 transition-all cursor-pointer shadow-sm active:scale-95"
+          aria-label="Next project"
+          title="Next project"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
 
       <div ref={stripRef} className="absolute inset-0">
         {images.map((item, index) => (

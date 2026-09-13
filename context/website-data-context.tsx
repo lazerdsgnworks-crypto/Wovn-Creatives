@@ -19,9 +19,9 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   contactEmail: "wovn.hq@gmail.com",
   phone: "+92 300 1234567",
   location: "Lahore, Pakistan",
-  instagramUrl: "https://www.instagram.com/dirbyraheem_?stkn=bGRtZ2R6cXc0NXpk",
-  linkedinUrl: "https://www.linkedin.com/in/umar-arif-92349537a/",
-  xUrl: "https://x.com",
+  instagramUrl: "https://www.linkedin.com/company/wovn-studios/",
+  linkedinUrl: "https://www.linkedin.com/company/wovn-studios/",
+  xUrl: "https://www.x.com",
   heroSpeed: 22,
   heroCards: 8,
 };

@@ -5,7 +5,43 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      {
+        name: 'gemini-api-dev-middleware',
+        configureServer(server) {
+          server.middlewares.use(async (req, res, next) => {
+            if (req.url === '/api/chat' && req.method === 'POST') {
+              let body = '';
+              req.on('data', (chunk) => {
+                body += chunk;
+              });
+              req.on('end', async () => {
+                try {
+                  const parsed = JSON.parse(body || '{}');
+                  const { processChat } = await import('./api/chat-handler');
+                  const result = await processChat(
+                    parsed.message,
+                    parsed.history,
+                    parsed.contextData
+                  );
+                  res.setHeader('Content-Type', 'application/json');
+                  res.statusCode = 200;
+                  res.end(JSON.stringify(result));
+                } catch (err: any) {
+                  res.statusCode = 500;
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ error: err?.message || 'Server error' }));
+                }
+              });
+            } else {
+              next();
+            }
+          });
+        },
+      },
+    ],
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

@@ -21,9 +21,9 @@ export function ContactPage({
   const settings = data?.settings;
   const effectiveCalLink = settings?.calLink || calLink;
   const contactEmail = settings?.contactEmail || "wovn.hq@gmail.com";
-  const instagramUrl = settings?.instagramUrl || "https://www.instagram.com/dirbyraheem_?stkn=bGRtZ2R6cXc0NXpk";
-  const linkedinUrl = settings?.linkedinUrl || "https://www.linkedin.com/in/umar-arif-92349537a/";
-  const xUrl = settings?.xUrl || "https://x.com";
+  const instagramUrl = settings?.instagramUrl || "https://www.linkedin.com/company/wovn-studios/";
+  const linkedinUrl = settings?.linkedinUrl || "https://www.linkedin.com/company/wovn-studios/";
+  const xUrl = settings?.xUrl || "https://www.x.com";
 
   React.useEffect(() => {
     // Cal embed loader snippet

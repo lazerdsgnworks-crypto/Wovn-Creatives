@@ -13,6 +13,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "home", label: "Home", targetId: "hero-top" },
   { id: "our-work", label: "Work", targetId: "our-work" },
   { id: "services", label: "Services", targetId: "services" },
+  { id: "process", label: "Process", targetId: "how-it-works" },
   { id: "contact", label: "Contact", targetId: "contact" },
 ];
 
@@ -56,11 +57,14 @@ export function Header({ currentPage = "home", onNavigate }: HeaderProps = {}) {
       }
 
       const contactEl = document.getElementById("contact");
+      const howItWorksEl = document.getElementById("how-it-works");
       const servicesEl = document.getElementById("services");
       const ourWorkEl = document.getElementById("our-work");
 
       if (contactEl && scrollY >= contactEl.offsetTop - 300) {
         setActiveSection("contact");
+      } else if (howItWorksEl && scrollY >= howItWorksEl.offsetTop - 260) {
+        setActiveSection("process");
       } else if (servicesEl && scrollY >= servicesEl.offsetTop - 260) {
         setActiveSection("services");
       } else if (ourWorkEl && scrollY >= ourWorkEl.offsetTop - 260) {

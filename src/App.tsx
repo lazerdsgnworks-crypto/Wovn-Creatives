@@ -16,17 +16,26 @@ import { useTheme } from "@/context/theme-context";
 
 const getInitialPage = (): AppPage => {
   if (typeof window === "undefined") return "home";
-  const path = window.location.pathname.toLowerCase();
+  const path = window.location.pathname.toLowerCase().replace(/\/+$/, "");
   const hash = window.location.hash.toLowerCase();
-  if (path === "/admin" || path.startsWith("/admin/") || hash === "#admin" || hash === "#/admin") {
+  const search = new URLSearchParams(window.location.search.toLowerCase());
+
+  if (
+    path === "/admin" ||
+    path.startsWith("/admin/") ||
+    hash === "#admin" ||
+    hash === "#/admin" ||
+    search.get("page") === "admin" ||
+    search.has("admin")
+  ) {
     return "admin";
   }
-  if (path === "/our-work" || hash === "#our-work") return "our-work";
-  if (path === "/contact" || hash === "#contact") return "contact";
-  if (path === "/privacy" || hash === "#privacy") return "privacy";
-  if (path === "/terms" || hash === "#terms") return "terms";
-  if (path === "/payments" || hash === "#payments") return "payments";
-  if (path === "/faqs" || hash === "#faqs") return "faqs";
+  if (path === "/our-work" || hash === "#our-work" || hash === "#/our-work" || search.get("page") === "our-work") return "our-work";
+  if (path === "/contact" || hash === "#contact" || hash === "#/contact" || search.get("page") === "contact") return "contact";
+  if (path === "/privacy" || hash === "#privacy" || hash === "#/privacy" || search.get("page") === "privacy") return "privacy";
+  if (path === "/terms" || hash === "#terms" || hash === "#/terms" || search.get("page") === "terms") return "terms";
+  if (path === "/payments" || hash === "#payments" || hash === "#/payments" || search.get("page") === "payments") return "payments";
+  if (path === "/faqs" || hash === "#faqs" || hash === "#/faqs" || search.get("page") === "faqs") return "faqs";
   return "home";
 };
 
@@ -37,7 +46,7 @@ export default function App() {
 
   // Sync with browser navigation & URL changes
   React.useEffect(() => {
-    const handlePopState = () => {
+    const handleUrlChange = () => {
       setCurrentPage(getInitialPage());
     };
 
@@ -49,10 +58,12 @@ export default function App() {
       }
     };
 
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("popstate", handleUrlChange);
+    window.addEventListener("hashchange", handleUrlChange);
     window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener("popstate", handlePopState);
+      window.removeEventListener("popstate", handleUrlChange);
+      window.removeEventListener("hashchange", handleUrlChange);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);

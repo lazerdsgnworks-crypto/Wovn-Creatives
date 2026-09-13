@@ -1,0 +1,6 @@
+{
+  "name": "Image Hero",
+  "description": "Streamlined 3D image corridor hero and Zoom Slider perspective showcase with refined typography and responsive work showcase",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

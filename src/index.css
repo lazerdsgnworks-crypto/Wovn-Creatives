@@ -96,11 +96,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Smooth, high-performance theme transitions on structural containers */
+/* Smooth, high-performance theme transitions on all elements during theme toggle */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition: background-color 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              fill 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              stroke 0.38s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  transition-delay: 0s !important;
+}
+
 body, header, nav, footer, section, main, [role="dialog"], button, input {
-  transition: background-color 0.3s ease,
-              border-color 0.3s ease,
-              color 0.3s ease;
+  transition: background-color 0.35s ease,
+              border-color 0.35s ease,
+              color 0.28s ease;
 }
 
 #root {
@@ -151,3 +164,13 @@ div:has(> a[href*="cal.com?utm_source="]) {
   opacity: 0 !important;
   pointer-events: none !important;
 }
+
+/* Custom styles for radial orbital timeline */
+.bg-gradient-orbital {
+  background: linear-gradient(to bottom right, #6366f1, #3b82f6, #14b8a6);
+}
+
+.shadow-orbital {
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+

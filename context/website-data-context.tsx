@@ -19,9 +19,9 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   contactEmail: "wovn.hq@gmail.com",
   phone: "+92 300 1234567",
   location: "Lahore, Pakistan",
-  instagramUrl: "https://www.linkedin.com/company/wovn-studios/",
+  instagramUrl: "https://www.instagram.com/wovncreatives",
   linkedinUrl: "https://www.linkedin.com/company/wovn-studios/",
-  xUrl: "https://www.x.com",
+  xUrl: "https://x.com/wovncreatives",
   heroSpeed: 22,
   heroCards: 8,
 };
@@ -48,7 +48,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     number: "03",
     name: "Abdul Raheem",
     role: "Senior Designer",
-    image: "https://cdn.21st.dev/assets/mirror/f7/f71c8ba6dcdbbd92b51148e24580d086bbb9ab8a7f3347fc85b8babadabf30b8.jpg",
+    image: "https://i.ibb.co/HLGfBWyn/fc51b2b7-dca4-4e3b-ba4e-628f9def461d.jpg",
     link: "https://www.instagram.com/dirbyraheem_?stkn=bGRtZ2R6cXc0NXpk",
   },
   {
@@ -56,7 +56,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     number: "04",
     name: "Muhammad Saad",
     role: "UI/UX & Development",
-    image: "https://cdn.21st.dev/assets/mirror/8e/8e261490a2d4c74252dcfe6dbc02f071e85e536db18802927b170d53c849efd3.jpg",
+    image: "https://i.ibb.co/7J3zrqnP/IMG-2772.png",
     link: "https://www.linkedin.com/in/hafizsaad-design?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
   {
@@ -64,7 +64,7 @@ export const DEFAULT_TEAM_MEMBERS: TeamMember[] = [
     number: "05",
     name: "Abdullah Shahid",
     role: "Full Stack Developer",
-    image: "https://cdn.21st.dev/assets/mirror/68/68abbec2895adaa5ab70d66ad4a4a41494e210d76471ecb9a8c113acc3ff2e6e.jpg",
+    image: "https://i.ibb.co/MDBw0fpv/IMG-2771.png",
     link: "https://www.linkedin.com/in/abdullah-shahid-a61175336?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
 ];
@@ -174,10 +174,10 @@ export const DEFAULT_PROJECTS: WorkProject[] = [
 export const DEFAULT_SERVICES: ServiceItem[] = [
   {
     id: "srv-01",
-    number: "01 — UI/UX Design (Framer)",
+    number: "01 - UI/UX Design (Framer)",
     badge: "Design & Build",
     titleLines: ["UI/UX", "DESIGN"],
-    tagline: "Crafting intuitive, high-converting digital experiences — designed and built in Framer.",
+    tagline: "Crafting intuitive, high-converting digital experiences, designed and built in Framer.",
     deliverables: [
       { title: "Wireframes & prototypes", description: "Interactive user flows, testing layouts, and structured wireframes." },
       { title: "High-fidelity UI design", description: "Pixel-perfect component systems, typography, and visual assets." },
@@ -187,7 +187,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
   },
   {
     id: "srv-02",
-    number: "02 — Branding",
+    number: "02 - Branding",
     badge: "Visual Identity",
     titleLines: ["Brand", "Identity", "Systems"],
     tagline: "Building a memorable brand identity that stands out and stays consistent everywhere.",
@@ -200,7 +200,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
   },
   {
     id: "srv-03",
-    number: "03 — Social Media Management",
+    number: "03 - Social Media Management",
     badge: "Growth & Reach",
     titleLines: ["Social", "Media", "Strategy"],
     tagline: "Growing your online presence with strategic content, consistent posting, and real engagement.",
@@ -213,7 +213,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
   },
   {
     id: "srv-04",
-    number: "04 — Web Development",
+    number: "04 - Web Development",
     badge: "Engineering",
     titleLines: ["Web", "Development", "& Code"],
     tagline: "Turning designs into fast, functional, and scalable websites.",
@@ -226,7 +226,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
   },
   {
     id: "srv-05",
-    number: "05 — AI Automations",
+    number: "05 - AI Automations",
     badge: "Smart Workflows",
     titleLines: ["AI", "Automations", "& Agents"],
     tagline: "Streamlining client operations and scaling speed with intelligent automations.",
@@ -258,7 +258,7 @@ export const DEFAULT_FAQS: FaqItem[] = [
   {
     id: "faq-04",
     q: "How long does a typical project take?",
-    a: "Timelines vary by service — a Framer website may take 2–4 weeks, branding 1–3 weeks, while social media management and AI automations are ongoing engagements. Exact timelines are shared in your proposal.",
+    a: "Timelines vary by service. A Framer website may take 2 to 4 weeks, branding 1 to 3 weeks, while social media management and AI automations are ongoing engagements. Exact timelines are shared in your proposal.",
   },
   {
     id: "faq-05",
@@ -385,9 +385,24 @@ export function WebsiteDataProvider({ children }: { children: React.ReactNode })
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
+        const teamData = Array.isArray(parsed.team) && parsed.team.length > 0
+          ? parsed.team.map((m: TeamMember) => {
+              if (m.name === "Abdul Raheem" && (!m.image || m.image.includes("cdn.21st.dev"))) {
+                return { ...m, image: "https://i.ibb.co/HLGfBWyn/fc51b2b7-dca4-4e3b-ba4e-628f9def461d.jpg" };
+              }
+              if (m.name === "Muhammad Saad" && (!m.image || m.image.includes("cdn.21st.dev"))) {
+                return { ...m, image: "https://i.ibb.co/7J3zrqnP/IMG-2772.png" };
+              }
+              if (m.name === "Abdullah Shahid" && (!m.image || m.image.includes("cdn.21st.dev"))) {
+                return { ...m, image: "https://i.ibb.co/MDBw0fpv/IMG-2771.png" };
+              }
+              return m;
+            })
+          : DEFAULT_TEAM_MEMBERS;
+
         return {
           settings: { ...DEFAULT_SITE_SETTINGS, ...(parsed.settings || {}) },
-          team: Array.isArray(parsed.team) && parsed.team.length > 0 ? parsed.team : DEFAULT_TEAM_MEMBERS,
+          team: teamData,
           projects: Array.isArray(parsed.projects) && parsed.projects.length > 0 ? parsed.projects : DEFAULT_PROJECTS,
           services: Array.isArray(parsed.services) && parsed.services.length > 0 ? parsed.services : DEFAULT_SERVICES,
           faqs: Array.isArray(parsed.faqs) && parsed.faqs.length > 0 ? parsed.faqs : DEFAULT_FAQS,
@@ -493,7 +508,7 @@ export function WebsiteDataProvider({ children }: { children: React.ReactNode })
     const newService: ServiceItem = {
       ...service,
       id: newId,
-      number: service.number || `${nextNumber} — ${service.badge}`,
+      number: service.number || `${nextNumber} - ${service.badge}`,
     };
     setData((prev) => ({
       ...prev,

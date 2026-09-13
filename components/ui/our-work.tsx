@@ -146,7 +146,7 @@ export function OurWork() {
       src: project.image,
       alt: project.title,
       title: project.title,
-      subtitle: `${project.category} — ${project.client}`,
+      subtitle: `${project.category} - ${project.client}`,
       meta: [
         { label: "Year", value: project.year },
         { label: "Client", value: project.client },

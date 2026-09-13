@@ -1,0 +1,30 @@
+{
+  "entities": {
+    "chat_sessions": {
+      "title": "Chat Sessions",
+      "description": "AI Chat sessions and history for visitors",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "title": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "title", "createdAt", "updatedAt"]
+    },
+    "chat_messages": {
+      "title": "Chat Messages",
+      "description": "Messages inside a chat session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sessionId": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "model"] },
+        "text": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "sessionId", "role", "text", "timestamp"]
+    }
+  }
+}

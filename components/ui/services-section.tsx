@@ -18,10 +18,10 @@ interface ServiceCardData {
 
 const SERVICES_DATA: ServiceCardData[] = [
   {
-    number: '01 — UI/UX Design (Framer)',
+    number: '01 - UI/UX Design (Framer)',
     badge: 'Design & Build',
     titleLines: ['UI/UX', 'DESIGN'],
-    tagline: 'Crafting intuitive, high-converting digital experiences — designed and built in Framer.',
+    tagline: 'Crafting intuitive, high-converting digital experiences, designed and built in Framer.',
     deliverables: [
       { title: 'Wireframes & prototypes', description: 'Interactive user flows, testing layouts, and structured wireframes.' },
       { title: 'High-fidelity UI design', description: 'Pixel-perfect component systems, typography, and visual assets.' },
@@ -30,7 +30,7 @@ const SERVICES_DATA: ServiceCardData[] = [
     ],
   },
   {
-    number: '02 — Branding',
+    number: '02 - Branding',
     badge: 'Visual Identity',
     titleLines: ['Brand', 'Identity', 'Systems'],
     tagline: 'Building a memorable brand identity that stands out and stays consistent everywhere.',
@@ -42,7 +42,7 @@ const SERVICES_DATA: ServiceCardData[] = [
     ],
   },
   {
-    number: '03 — Social Media Management',
+    number: '03 - Social Media Management',
     badge: 'Growth & Reach',
     titleLines: ['Social', 'Media', 'Strategy'],
     tagline: 'Growing your online presence with strategic content, consistent posting, and real engagement.',
@@ -54,7 +54,7 @@ const SERVICES_DATA: ServiceCardData[] = [
     ],
   },
   {
-    number: '04 — Web Development',
+    number: '04 - Web Development',
     badge: 'Engineering',
     titleLines: ['Web', 'Development', '& Code'],
     tagline: 'Turning designs into fast, functional, and scalable websites.',
@@ -66,7 +66,7 @@ const SERVICES_DATA: ServiceCardData[] = [
     ],
   },
   {
-    number: '05 — AI Automations',
+    number: '05 - AI Automations',
     badge: 'Smart Workflows',
     titleLines: ['AI', 'Automations', '& Agents'],
     tagline: 'Automating repetitive tasks and connecting your tools with smart AI workflows.',
@@ -106,19 +106,19 @@ export function ServicesSection() {
             >
               {/* Card Header Top Row */}
               <div className="flex items-center justify-between gap-4">
-                <p className={`text-xs sm:text-sm font-bold uppercase tracking-[0.2em] ${numberLabelClass}`}>
-                  {service.number}
+                <p className={`text-xs sm:text-sm font-normal uppercase tracking-[0.2em] ${numberLabelClass}`}>
+                  {service.number.replace(/—/g, '-').replace(/–/g, '-')}
                 </p>
                 <span className={`text-xs font-mono uppercase tracking-widest ${numberLabelClass}`}>
                   {service.badge}
                 </span>
               </div>
 
-              <div className="my-[1.2vw]" />
+              <div className="my-2 sm:my-3 md:my-[1.2vw]" />
 
-              {/* Huge Bold Headline */}
+              {/* Huge Headline without bold */}
               <div>
-                <h2 className="text-[clamp(2.8rem,9vw,11rem)] font-bold leading-[0.88] uppercase tracking-tight">
+                <h2 className="text-[clamp(2.6rem,8.5vw,10.5rem)] font-normal leading-[0.9] uppercase tracking-tight">
                   {service.titleLines.map((line, lIdx) => (
                     <React.Fragment key={lIdx}>
                       {line}
@@ -128,14 +128,14 @@ export function ServicesSection() {
                 </h2>
               </div>
 
-              <div className="my-[1.2vw]" />
+              <div className="my-2 sm:my-3 md:my-[1.2vw]" />
 
-              {/* Tagline */}
-              <p className={`max-w-[58ch] text-[clamp(1.05rem,2.2vw,1.85rem)] font-normal leading-relaxed ${subtextClass}`}>
-                {service.tagline}
+              {/* Tagline without em dashes */}
+              <p className={`max-w-[58ch] text-[clamp(1rem,2vw,1.75rem)] font-normal leading-relaxed ${subtextClass}`}>
+                {service.tagline.replace(/—/g, ', ').replace(/–/g, '-')}
               </p>
 
-              <div className="my-[1.2vw]" />
+              <div className="my-2 sm:my-3 md:my-[1.2vw]" />
 
               {/* 4 Deliverables / Items (Clean, Borderless, Background-Free) */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 my-2">
@@ -144,17 +144,17 @@ export function ServicesSection() {
                     key={item.title}
                     className="p-0 transition-all duration-300 bg-transparent border-0"
                   >
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className={`text-xs font-mono uppercase font-semibold ${numberLabelClass}`}>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className={`text-xs font-mono uppercase font-normal ${numberLabelClass}`}>
                         0{dIdx + 1}
                       </span>
                     </div>
-                    <p className={`text-sm sm:text-base font-bold mb-1.5 leading-snug ${itemTitleClass}`}>
+                    <p className={`text-sm sm:text-base font-normal mb-1.5 leading-snug ${itemTitleClass}`}>
                       {item.title}
                     </p>
                     {item.description && (
-                      <p className={`text-xs sm:text-[13px] leading-relaxed ${itemDescClass}`}>
-                        {item.description}
+                      <p className={`text-xs sm:text-[13px] font-normal leading-relaxed ${itemDescClass}`}>
+                        {item.description.replace(/—/g, ', ').replace(/–/g, '-')}
                       </p>
                     )}
                   </div>
@@ -162,8 +162,7 @@ export function ServicesSection() {
               </div>
 
               {/* Footer Pagination Bar */}
-              <div className="mt-auto pt-6 flex items-center justify-between text-[11px] font-mono uppercase tracking-widest opacity-60">
-                <span>WOVN STUDIO SERVICES</span>
+              <div className="mt-auto pt-6 flex items-center justify-end text-[11px] font-mono uppercase tracking-widest opacity-60">
                 <span>0{index + 1} / 05</span>
               </div>
             </FlowSection>

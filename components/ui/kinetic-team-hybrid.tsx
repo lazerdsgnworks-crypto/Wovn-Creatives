@@ -44,7 +44,7 @@ const TEAM: TeamMember[] = [
     name: "Abdul Raheem",
     role: "Senior Designer",
     image:
-      "https://cdn.21st.dev/assets/mirror/f7/f71c8ba6dcdbbd92b51148e24580d086bbb9ab8a7f3347fc85b8babadabf30b8.jpg",
+      "https://i.ibb.co/HLGfBWyn/fc51b2b7-dca4-4e3b-ba4e-628f9def461d.jpg",
     link: "https://www.instagram.com/dirbyraheem_?stkn=bGRtZ2R6cXc0NXpk",
   },
   {
@@ -52,7 +52,7 @@ const TEAM: TeamMember[] = [
     name: "Muhammad Saad",
     role: "UI/UX & Development",
     image:
-      "https://cdn.21st.dev/assets/mirror/8e/8e261490a2d4c74252dcfe6dbc02f071e85e536db18802927b170d53c849efd3.jpg",
+      "https://i.ibb.co/7J3zrqnP/IMG-2772.png",
     link: "https://www.linkedin.com/in/hafizsaad-design?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
   {
@@ -60,7 +60,7 @@ const TEAM: TeamMember[] = [
     name: "Abdullah Shahid",
     role: "Full Stack Developer",
     image:
-      "https://cdn.21st.dev/assets/mirror/68/68abbec2895adaa5ab70d66ad4a4a41494e210d76471ecb9a8c113acc3ff2e6e.jpg",
+      "https://i.ibb.co/MDBw0fpv/IMG-2771.png",
     link: "https://www.linkedin.com/in/abdullah-shahid-a61175336?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   },
 ];
@@ -105,7 +105,7 @@ export function KineticTeamHybrid() {
       id="team"
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className="relative min-h-screen w-full cursor-default bg-white dark:bg-neutral-950 px-6 py-24 text-zinc-900 dark:text-neutral-200 md:px-12 transition-colors duration-500"
+      className="relative w-full cursor-default bg-white dark:bg-neutral-950 px-4 sm:px-6 py-12 sm:py-16 md:py-24 text-zinc-900 dark:text-neutral-200 md:px-12 transition-colors duration-500"
     >
       {/* Background Ambience */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(0,0,0,0.02),transparent_70%)] dark:bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.03),transparent_70%)]" />
@@ -116,7 +116,7 @@ export function KineticTeamHybrid() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-16 md:mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
+          className="mb-8 sm:mb-12 md:mb-20 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
           <div>
             <h1 className="text-4xl font-light tracking-tighter text-zinc-950 dark:text-white sm:text-6xl md:text-8xl">
@@ -237,7 +237,7 @@ function TeamRow({
       onClick={handleClick}
       className={`group relative border-t border-zinc-200 dark:border-neutral-900 transition-colors duration-500 last:border-b cursor-pointer`}
     >
-      <div className="relative z-10 flex flex-col py-8 md:flex-row md:items-center md:justify-between md:py-12">
+      <div className="relative z-10 flex flex-col py-5 sm:py-7 md:flex-row md:items-center md:justify-between md:py-12">
         {/* Name & Index Section */}
         <div className="flex items-baseline gap-6 md:gap-12 pl-4 md:pl-0 transition-transform duration-500 group-hover:translate-x-4">
           <span className="font-mono text-xs text-zinc-400 dark:text-neutral-600">

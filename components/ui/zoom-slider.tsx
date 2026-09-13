@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import gsap from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 
@@ -299,17 +298,10 @@ export function ZoomSliderComp({
     };
 
     const onWheel = (event: WheelEvent) => {
-      // If user is holding Shift (standard horizontal scroll gesture) or explicitly scrolling horizontally:
-      if (event.shiftKey) {
-        event.preventDefault();
-        const delta = (event.deltaY || event.deltaX) * SCROLL_PER_PX;
-        state.target -= delta;
-      } else if (Math.abs(event.deltaX) > Math.abs(event.deltaY) && Math.abs(event.deltaX) > 3) {
-        event.preventDefault();
-        state.target -= event.deltaX * SCROLL_PER_PX;
-      }
-      // Normal vertical mouse wheel / trackpad scroll (event.deltaY) is NOT hijacked or prevented!
-      // This allows the user to scroll smoothly through the page past the Work section to the rest of the website.
+      event.preventDefault();
+      const delta = (event.deltaY !== 0 ? event.deltaY : event.deltaX) * SCROLL_PER_PX;
+      state.target -= delta;
+      state.velocity = lerp(state.velocity, -delta * 0.4, 0.3);
     };
 
     const beginDrag = (clientX: number, clientY: number) => {
@@ -536,26 +528,18 @@ export function ZoomSliderComp({
       : `Slide ${activeIndex + 1} of ${images.length}`
     : '';
 
-  const slideNext = () => {
-    stateRef.current.target -= cardStep;
-  };
-
-  const slidePrev = () => {
-    stateRef.current.target += cardStep;
-  };
-
   return (
     <div
       id={id}
       ref={containerRef}
-      className={`relative w-full overflow-hidden bg-white dark:bg-black select-none transition-colors duration-200 h-[min(84vh,780px)] min-h-[620px] md:h-[min(98vh,1080px)] md:min-h-[880px] pb-4 ${className}`}
+      className={`relative w-full overflow-hidden bg-white dark:bg-black select-none transition-colors duration-200 h-[min(68vh,600px)] min-h-[480px] sm:h-[min(80vh,760px)] sm:min-h-[580px] md:h-[min(98vh,1080px)] md:min-h-[880px] pb-2 sm:pb-4 ${className}`}
       style={{ touchAction: 'pan-y' }}
     >
       <div className="sr-only" aria-live="polite" aria-atomic="true">
         {slideAnnouncement}
       </div>
       {title ? (
-        <div className="pointer-events-none absolute left-1/2 top-6 sm:top-8 z-20 -translate-x-1/2 px-4 text-center">
+        <div className="pointer-events-none absolute left-1/2 top-4 sm:top-6 md:top-8 z-20 -translate-x-1/2 px-4 text-center">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium tracking-[-0.04em] text-zinc-950 dark:text-white transition-colors">
             {title}
           </h1>
@@ -566,28 +550,6 @@ export function ZoomSliderComp({
           ) : null}
         </div>
       ) : null}
-
-      {/* Discrete project navigation arrows */}
-      <div className="absolute right-4 sm:right-8 top-6 sm:top-8 z-20 flex items-center gap-2">
-        <button
-          type="button"
-          onClick={slidePrev}
-          className="p-2 sm:p-2.5 rounded-full bg-zinc-100/90 hover:bg-zinc-200 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 transition-all cursor-pointer shadow-sm active:scale-95"
-          aria-label="Previous project"
-          title="Previous project"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <button
-          type="button"
-          onClick={slideNext}
-          className="p-2 sm:p-2.5 rounded-full bg-zinc-100/90 hover:bg-zinc-200 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 backdrop-blur-md border border-zinc-200/80 dark:border-zinc-800 transition-all cursor-pointer shadow-sm active:scale-95"
-          aria-label="Next project"
-          title="Next project"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
 
       <div ref={stripRef} className="absolute inset-0">
         {images.map((item, index) => (
@@ -629,7 +591,7 @@ export function ZoomSliderComp({
                 data-desc
                 className="overflow-hidden text-[11px] sm:text-xs select-none font-normal leading-normal tracking-[-0.01em] text-zinc-600 dark:text-white/70"
               >
-                {item.desc}
+                {item.desc?.replace(/—/g, ', ').replace(/–/g, '-')}
               </p>
             </div>
 

@@ -1692,7 +1692,7 @@ function ServiceModal({
   onSave: (data: Omit<ServiceItem, "id">) => void;
 }) {
   const [badge, setBadge] = useState(service?.badge || "Design & Build");
-  const [number, setNumber] = useState(service?.number || "01 — UI/UX Design (Framer)");
+  const [number, setNumber] = useState(service?.number || "01 - UI/UX Design (Framer)");
   const [titleStr, setTitleStr] = useState(service?.titleLines.join(" ") || "UI/UX DESIGN");
   const [tagline, setTagline] = useState(service?.tagline || "");
   const [deliverablesStr, setDeliverablesStr] = useState(
@@ -1732,7 +1732,7 @@ function ServiceModal({
                 type="text"
                 value={number}
                 onChange={(e) => setNumber(e.target.value)}
-                placeholder="01 — UI/UX"
+                placeholder="01 - UI/UX"
                 className="w-full px-3 py-2 rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 text-sm"
               />
             </div>

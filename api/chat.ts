@@ -16,9 +16,9 @@ export default async function handler(req: any, res: any) {
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
-    const { message, history, contextData } = body;
+    const { message, history, contextData, userId, sessionId } = body;
 
-    const result = await processChat(message, history, contextData);
+    const result = await processChat(message, history, contextData, userId, sessionId);
     return res.status(200).json(result);
   } catch (error: any) {
     console.error("Vercel /api/chat error:", error);

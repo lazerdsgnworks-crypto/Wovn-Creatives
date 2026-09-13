@@ -10,6 +10,9 @@ import {
   Calendar,
 } from "lucide-react";
 import { useWebsiteData } from "@/context/website-data-context";
+import { useAuth } from "@/context/auth-context";
+import { cleanChatReply } from "@/lib/utils";
+import { FormattedMessage } from "@/components/ui/formatted-message";
 
 interface Message {
   id: string;
@@ -27,21 +30,23 @@ const QUICK_PROMPTS = [
 
 export const WovnChatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [sessionId] = useState(() => "widget_" + Date.now());
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { user } = useAuth();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
       role: "model",
-      text: "Hello! I am **Wovn AI**. Ask me anything about our design and web engineering services, our founders & team, showcase projects, or booking a consultation.",
+      text: cleanChatReply("Hello! I am Wovn AI. Ask me anything about our design and web engineering services, our founders & team, showcase projects, or booking a consultation."),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
     },
   ]);
 
-  const websiteData = useWebsiteData();
-  const siteSettings = websiteData?.siteSettings;
-  const teamMembers = websiteData?.teamMembers || [];
+  const { data: websiteData } = useWebsiteData();
+  const siteSettings = websiteData?.settings;
+  const teamMembers = websiteData?.team || [];
   const projects = websiteData?.projects || [];
   const services = websiteData?.services || [];
 
@@ -165,6 +170,9 @@ Projects (${projects.length}): ${projects.map((p) => `${p.title} (${p.desc})`).j
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           message: textToSend,
+          chatInput: textToSend,
+          userId: user ? user.uid : "guest_user",
+          sessionId,
           history: historyPayload,
           contextData: contextSummary,
         }),
@@ -175,7 +183,8 @@ Projects (${projects.length}): ${projects.map((p) => `${p.title} (${p.desc})`).j
       }
 
       const data = await response.json();
-      const botReply = data?.text || "Thank you for reaching out to Wovn Creatives.";
+      const rawReply = data?.text || data?.message || data?.output || "Thank you for reaching out to Wovn Creatives.";
+      const botReply = cleanChatReply(rawReply);
 
       setMessages((prev) => [
         ...prev,
@@ -189,59 +198,21 @@ Projects (${projects.length}): ${projects.map((p) => `${p.title} (${p.desc})`).j
     } catch (err) {
       console.error("Chat request error:", err);
       // Fallback response so user never gets a broken UI
+      const fallbackMsg = cleanChatReply(
+        "Wovn Creatives is a premier creative studio specializing in UI/UX Design (Framer), Visual Branding & Identity, Modern Web Engineering, 3D Kinetic Visuals, and AI Automations. You can reach our team directly at wovn.hq@gmail.com or book a strategy call at cal.com/wovn-creatives/w."
+      );
       setMessages((prev) => [
         ...prev,
         {
           id: `bot-${Date.now()}`,
           role: "model",
-          text: "Wovn Creatives is a premier creative studio specializing in UI/UX Design (Framer), Visual Branding & Identity, Modern Web Engineering, 3D Kinetic Visuals, and AI Automations. You can reach our team directly at wovn.hq@gmail.com or book a strategy call at [cal.com/wovn-creatives/w](https://cal.com/wovn-creatives/w).",
+          text: fallbackMsg,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ]);
     } finally {
       setLoading(false);
     }
-  };
-
-  // Simple, safe formatter for markdown bold, bullet points, and links
-  const renderFormattedText = (text: string) => {
-    if (!text) return null;
-    const parts = text.split(/(\[.*?\]\(.*?\))/g);
-
-    return parts.map((part, i) => {
-      const linkMatch = part.match(/\[(.*?)\]\((.*?)\)/);
-      if (linkMatch) {
-        const [, label, url] = linkMatch;
-        return (
-          <a
-            key={`link-${i}`}
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-cyan-500 hover:text-cyan-400 underline font-medium break-all"
-          >
-            {label}
-            <ExternalLink className="w-3 h-3 inline shrink-0" />
-          </a>
-        );
-      }
-
-      const boldParts = part.split(/(\*\*.*?\*\*)/g);
-      return (
-        <React.Fragment key={`text-${i}`}>
-          {boldParts.map((bp, j) => {
-            if (bp.startsWith("**") && bp.endsWith("**")) {
-              return (
-                <strong key={`bold-${j}`} className="font-semibold text-zinc-950 dark:text-white">
-                  {bp.slice(2, -2)}
-                </strong>
-              );
-            }
-            return bp;
-          })}
-        </React.Fragment>
-      );
-    });
   };
 
   const calHref = siteSettings?.calLink
@@ -304,7 +275,15 @@ Projects (${projects.length}): ${projects.map((p) => `${p.title} (${p.desc})`).j
                         : "bg-zinc-100/90 dark:bg-zinc-900/90 text-zinc-800 dark:text-zinc-200 border border-zinc-200/70 dark:border-zinc-800/80 rounded-tl-xs shadow-2xs"
                     }`}
                   >
-                    <div className="whitespace-pre-wrap">{renderFormattedText(m.text)}</div>
+                    <FormattedMessage
+                      content={m.text}
+                      isUser={isUser}
+                      className={
+                        isUser
+                          ? "text-white dark:text-zinc-950 text-xs sm:text-[13px]"
+                          : "text-zinc-800 dark:text-zinc-200 text-xs sm:text-[13px]"
+                      }
+                    />
 
                     {!isUser && (
                       <div className="mt-2 pt-1.5 border-t border-zinc-200/50 dark:border-zinc-800/60 flex items-center justify-between text-[10px] text-zinc-400 dark:text-zinc-500">

@@ -24,7 +24,9 @@ export default defineConfig(() => {
                   const result = await processChat(
                     parsed.message,
                     parsed.history,
-                    parsed.contextData
+                    parsed.contextData,
+                    parsed.userId,
+                    parsed.sessionId
                   );
                   res.setHeader('Content-Type', 'application/json');
                   res.statusCode = 200;

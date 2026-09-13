@@ -28,7 +28,7 @@ const FAQS_DATA = [
   },
   {
     q: "How long does a typical project take?",
-    a: "Timelines vary by service — a Framer website may take 2–4 weeks, branding 1–3 weeks, while social media management and AI automations are ongoing engagements. Exact timelines are shared in your proposal.",
+    a: "Timelines vary by service. A Framer website may take 2 to 4 weeks, branding 1 to 3 weeks, while social media management and AI automations are ongoing engagements. Exact timelines are shared in your proposal.",
   },
   {
     q: "Do you work with international clients?",
@@ -273,10 +273,10 @@ export function LegalPoliciesPage({
                   1.3 Revision & Project Policy
                 </h3>
                 <p className="text-zinc-600 dark:text-zinc-400 mb-3">
-                  Each service package includes a set number of revision rounds (typically 1–2 rounds). Scope expansions are quoted separately.
+                  Each service package includes a set number of revision rounds (typically 1 to 2 rounds). Scope expansions are quoted separately.
                 </p>
                 <ul className="list-disc pl-5 space-y-2 text-zinc-600 dark:text-zinc-400">
-                  <li><strong>UI/UX & Branding:</strong> Revisions apply to design direction, layout, and content adjustments — not full concept restarts after approval.</li>
+                  <li><strong>UI/UX & Branding:</strong> Revisions apply to design direction, layout, and content adjustments, not full concept restarts after approval.</li>
                   <li><strong>Web Development:</strong> Bug fixes within 14 days of launch are covered at no charge. Feature additions are billed separately.</li>
                   <li><strong>Social Media Management:</strong> Content revisions must be requested before scheduled posting dates.</li>
                   <li><strong>AI Automations:</strong> Includes testing and adjustment during setup; ongoing optimization beyond agreed scope is billed as a separate retainer.</li>
